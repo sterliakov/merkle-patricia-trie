@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'cytoolz ~= 0.12.0',
-        'eth-hash ~= 0.5.0',
+        'eth-hash ~= 0.3.1',
         'eth-typing ~= 3.1.0',
         'eth-utils ~= 1.10.0',
         'pycryptodome ~= 3.15.0',
