@@ -1,26 +1,26 @@
 import setuptools
 
-with open("README.md", "r") as fh:
+with open('README.md') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="eth_mpt",
-    version="0.2.0",
-    author="Igor Aleksanov",
-    author_email="popzxc@yandex.com",
-    description="A simlpe Merkle Patricia Trie implementation",
+    name='eth_mpt',
+    version='0.2.0',
+    author='Igor Aleksanov',
+    author_email='popzxc@yandex.com',
+    description='A simlpe Merkle Patricia Trie implementation',
     long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/popzxc/merkle-patricia-trie",
+    long_description_content_type='text/markdown',
+    url='https://github.com/popzxc/merkle-patricia-trie',
     packages=setuptools.find_packages(),
     install_requires=[
-        "pysha3 ~= 1.0",
+        'pysha3 ~= 1.0',
         'rlp ~= 2.0',
     ],
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Topic :: Security :: Cryptography",
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Topic :: Security :: Cryptography',
     ],
 )

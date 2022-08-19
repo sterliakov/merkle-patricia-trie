@@ -1,18 +1,19 @@
 import rlp
-from .nibble_path import NibblePath
+
 from .hash import keccak_hash
+from .nibble_path import NibblePath
 
 
 def _prepare_reference_for_usage(ref):
-    """ Encodes reference into RLP if needed so stored references will appear as bytes. """
-    if isinstance(ref, list):
+    """Encodes reference into RLP so stored references will appear as bytes."""
+    if not isinstance(ref, bytes):
         return rlp.encode(ref)
 
     return ref
 
 
 def _prepare_reference_for_encoding(ref):
-    """ Decodes RLP-encoded reference if needed so the full node will be encoded correctly. """
+    """Decodes RLP-encoded reference so the full node will be encoded correctly."""
     if 0 < len(ref) < 32:
         return rlp.decode(ref)
 
@@ -48,11 +49,13 @@ class Node:
             branches = list(map(_prepare_reference_for_encoding, self.branches))
             return rlp.encode(branches + [self.data])
 
-    def decode(encoded_data):
-        """ Decodes node from RLP. """
+    @classmethod
+    def decode(cls, encoded_data):
+        """Decodes node from RLP."""
         data = rlp.decode(encoded_data)
 
-        assert len(data) == 17 or len(data) == 2   # TODO throw exception
+        if len(data) not in {17, 2}:
+            raise ValueError('Unknown data format.')
 
         if len(data) == 17:
             branches = list(map(_prepare_reference_for_usage, data[:16]))
@@ -66,11 +69,12 @@ class Node:
             ref = _prepare_reference_for_usage(data[1])
             return Node.Extension(path, ref)
 
-    def into_reference(node):
-        """
-        Returns reference to the given node.
+    @classmethod
+    def into_reference(cls, node):
+        """Returns reference to the given node.
 
-        If length of encoded node is less than 32 bytes, the reference is encoded node itseld (In-place reference).
+        If length of encoded node is less than 32 bytes, the reference is encoded node
+        itself (In-place reference).
         Otherwise reference is keccak hash of encoded node.
         """
         encoded_node = node.encode()

@@ -1,17 +1,13 @@
-# -*- coding: utf-8 -*-
+"""Python implementation of Merkle Patricia Trie.
+
+:copyright: © 2019 by Igor Aleksanov.
+
+:license: MIT, see LICENSE for more details.
 """
-    mpt
-    ~~~~~
-    Python implementation of Merkle Patricia Trie.
-
-    :copyright: © 2019 by Igor Aleksanov.
-
-    :license: MIT, see LICENSE for more details.
-"""
-
-__version__ = '0.1.0'
-
-
 from .mpt import MerklePatriciaTrie
 
-name = "mpt"
+__version__ = '0.3.0'
+
+name = 'mpt'
+
+__all__ = ['MerklePatriciaTrie']

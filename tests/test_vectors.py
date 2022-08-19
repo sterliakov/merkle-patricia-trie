@@ -1,15 +1,15 @@
-import unittest
-from mpt import MerklePatriciaTrie
-from mpt.hash import keccak_hash
-import os
 import json
+import os
+import unittest
+
+from mpt import MerklePatriciaTrie
 
 CURRENT_FOLDER = os.path.dirname(os.path.realpath(__file__))
 BASE_FOLDER = os.path.join(CURRENT_FOLDER, 'test_vectors')
 
 
-def open_testvector(name):
-    return open(os.path.join(BASE_FOLDER, name))
+def make_testvector_name(name):
+    return os.path.join(BASE_FOLDER, name)
 
 
 def normalize_value(v):
@@ -28,14 +28,16 @@ def normalize_kv(k, v):
 
 class TestVectors(unittest.TestCase):
     def run_testvector(self, name, secure):
-        with open_testvector(name) as f:
+        with open(make_testvector_name(name)) as f:
             data = json.load(f)
             for test in data:
                 input_data = data[test]['in']
                 storage = {}
                 trie = MerklePatriciaTrie(storage, secure=secure)
 
-                data_samples = input_data if isinstance(input_data, list) else input_data.items()
+                data_samples = (
+                    input_data if isinstance(input_data, list) else input_data.items()
+                )
 
                 for k, v in data_samples:
                     k, v = normalize_kv(k, v)
@@ -46,7 +48,9 @@ class TestVectors(unittest.TestCase):
                         trie.delete(k)
 
                 expected_root = normalize_value(data[test]['root'])
-                self.assertEqual(trie.root_hash(), expected_root, msg='Test {} failed'.format(test))
+                self.assertEqual(
+                    trie.root_hash(), expected_root, msg=f'Test {test} failed'
+                )
 
     def test_hex_encoded_securetrie_test(self):
         test_vector_name = 'hex_encoded_securetrie_test.json'

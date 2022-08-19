@@ -1,9 +1,11 @@
+import random
 import unittest
+
+import rlp
+
 from mpt import MerklePatriciaTrie
 from mpt.nibble_path import NibblePath
 from mpt.node import Node
-import rlp
-import random
 
 
 class TestNibblePath(unittest.TestCase):
@@ -99,8 +101,12 @@ class TestMPT(unittest.TestCase):
         storage = {}
         trie = MerklePatriciaTrie(storage)
 
-        key = rlp.encode(b'key_0000000000000000000000000000000000000000000000000000000000000000')
-        value = rlp.encode(b'value_0000000000000000000000000000000000000000000000000000000000000000')
+        key = rlp.encode(
+            b'key_0000000000000000000000000000000000000000000000000000000000000000'
+        )
+        value = rlp.encode(
+            b'value_0000000000000000000000000000000000000000000000000000000000000000'
+        )
         trie.update(key, value)
         gotten_value = trie.get(key)
 
@@ -125,7 +131,7 @@ class TestMPT(unittest.TestCase):
         random.seed(42)
         storage = {}
         rand_numbers = [random.randint(1, 1000000) for _ in range(100)]
-        keys = list(map(lambda x: bytes('{}'.format(x), 'utf-8'), rand_numbers))
+        keys = list(map(lambda x: bytes(f'{x}', 'utf-8'), rand_numbers))
 
         trie = MerklePatriciaTrie(storage)
 
@@ -172,8 +178,8 @@ class TestMPT(unittest.TestCase):
     def test_delete_lots(self):
         random.seed(42)
         storage = {}
-        rand_numbers = set([random.randint(1, 1000000) for _ in range(100)])  # Unique only.
-        keys = list(map(lambda x: bytes('{}'.format(x), 'utf-8'), rand_numbers))
+        rand_numbers = {random.randint(1, 1000000) for _ in range(100)}  # Unique only.
+        keys = list(map(lambda x: bytes(f'{x}', 'utf-8'), rand_numbers))
 
         trie = MerklePatriciaTrie(storage)
 
@@ -197,7 +203,12 @@ class TestMPT(unittest.TestCase):
 
         root_hash = trie.root_hash()
 
-        self.assertEqual(root_hash, bytes.fromhex('5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'))
+        self.assertEqual(
+            root_hash,
+            bytes.fromhex(
+                '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'
+            ),
+        )
 
     def test_root_hash_after_updates(self):
         storage = {}
@@ -215,7 +226,12 @@ class TestMPT(unittest.TestCase):
 
         root_hash = trie.root_hash()
 
-        self.assertEqual(root_hash, bytes.fromhex('5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'))
+        self.assertEqual(
+            root_hash,
+            bytes.fromhex(
+                '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'
+            ),
+        )
 
     def test_root_hash_after_deletes(self):
         storage = {}
@@ -239,7 +255,12 @@ class TestMPT(unittest.TestCase):
 
         root_hash = trie.root_hash()
 
-        self.assertEqual(root_hash, bytes.fromhex('5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'))
+        self.assertEqual(
+            root_hash,
+            bytes.fromhex(
+                '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'
+            ),
+        )
 
     def test_trie_from_old_root(self):
         storage = {}
