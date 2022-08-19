@@ -95,11 +95,9 @@ class NibblePath:
         is_odd = nibbles_len % 2 == 1
 
         prefix = (
-            0x00 + self.ODD_FLAG + self.at(0)
-            if is_odd
-            else 0x00 + self.LEAF_FLAG
-            if is_leaf
-            else 0x00
+            0x00
+            + (self.ODD_FLAG + self.at(0) if is_odd else 0x00)
+            + (self.LEAF_FLAG if is_leaf else 0x00)
         )
         output = [prefix]
 
