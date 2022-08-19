@@ -1,5 +1,5 @@
-[![PyPi Version](https://img.shields.io/pypi/v/mercle-patricia-trie.svg)](https://pypi.python.org/pypi/mercle-patricia-trie/)
-[![Python Versions](https://img.shields.io/pypi/pyversions/mercle-patricia-trie.svg)](https://pypi.python.org/pypi/mercle-patricia-trie/)
+[![PyPi Version](https://img.shields.io/pypi/v/merkle-patricia-trie.svg)](https://pypi.python.org/pypi/merkle-patricia-trie/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/merkle-patricia-trie.svg)](https://pypi.python.org/pypi/merkle-patricia-trie/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Code style: black](https://img.shields.io/badge/code%20style-blue-blue.svg)](https://blue.readthedocs.io/)
 
