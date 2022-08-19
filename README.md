@@ -1,3 +1,7 @@
+# Credits
+
+This is a fork of [eth_mpt](https://github.com/popzxc/merkle-patricia-trie) package with minor improvements.
+
 # Modified Merkle Paticia Trie
 
 MPT is the data structure used in [Ethereum](https://www.ethereum.org/) as a cryptographically authenticated key-value data storage. 
@@ -39,19 +43,5 @@ except KeyError:
 Install and update using [pip](https://pip.pypa.io/en/stable/quickstart/):
 
 ```
-pip install -U eth_mpt
-```
-
-## Documentation
-
-Documentation can be found on [readthedocs](https://merkle-patricia-trie.readthedocs.io/en/latest/).
-
-## Contributing
-
-All the contributors are welcome. If you can make this library better, don't hesitate to :)
-
-## Testing
-
-```bash
-python -m unittest
+pip install -U mercle_patricia_trie
 ```

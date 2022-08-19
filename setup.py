@@ -14,13 +14,8 @@ setuptools.setup(
     url="https://github.com/popzxc/merkle-patricia-trie",
     packages=setuptools.find_packages(),
     install_requires=[
-        'cytoolz ~= 0.12.0',
-        'eth-hash ~= 0.3.1',
-        'eth-typing ~= 2.2.1',
-        'eth-utils ~= 1.10.0',
-        'pycryptodome ~= 3.15.0',
-        'rlp ~= 2.0.1',
-        'toolz ~= 0.12.0',
+        "pysha3 ~= 1.0",
+        'rlp ~= 2.0',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
