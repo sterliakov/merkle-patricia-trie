@@ -1,3 +1,9 @@
+[![PyPi Version](https://img.shields.io/pypi/v/mercle-patricia-tree.svg)](https://pypi.python.org/pypi/mercle-patricia-tree/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/mercle-patricia-tree.svg)](https://pypi.python.org/pypi/mercle-patricia-tree/)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Code style: black](https://img.shields.io/badge/code%20style-blue-blue.svg)](https://blue.readthedocs.io/)
+
+
 # Credits
 
 This is a fork of [eth_mpt](https://github.com/popzxc/merkle-patricia-trie) package with minor improvements.
