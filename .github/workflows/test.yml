@@ -51,4 +51,4 @@ jobs:
           pip install .
       - name: Run regular tests
         run: |
-          pythom -m unittest
+          python -m unittest
