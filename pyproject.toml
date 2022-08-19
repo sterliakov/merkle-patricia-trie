@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 dynamic = ["version"]
-name = "pymatic"
+name = "merkle-patricia-trie"
 authors = [{name = "sterliakov", email = "terlya.stas@gmail.com"}]
 readme = "README.md"
 description = "A simlpe Merkle Patricia Trie implementation"
@@ -29,20 +29,6 @@ requires-python = ">=3.7"
 
 [tool.setuptools.dynamic]
 version = {attr = "mpt.__version__"}
-
-[project.optional-dependencies]
-test = [
-    'pytest>=6.4.0',
-    "pytest-cov",
-    "pytest-mock",
-    "pre-commit",
-]
-docs = [
-    'docutils>=0.14,<0.18',  # Sphinx haven't upgraded yet
-    "sphinx>=4.5.0,<5.0.0",
-    "sphinx-rtd-theme",
-    "autodocsumm>=0.2.8,<0.3.0",
-]
 
 [project.urls]
 Home = "https://github.com/sterliakov/merkle-patricia-trie"
