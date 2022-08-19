@@ -49,7 +49,9 @@ class TestVectors(unittest.TestCase):
 
                 expected_root = normalize_value(data[test]['root'])
                 self.assertEqual(
-                    trie.root_hash(), expected_root, msg=f'Test {test} failed'
+                    trie.root_hash().hex(),
+                    expected_root.hex(),
+                    msg=f'Test {test} failed',
                 )
 
     def test_hex_encoded_securetrie_test(self):

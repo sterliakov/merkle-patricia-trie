@@ -131,7 +131,7 @@ class TestMPT(unittest.TestCase):
         random.seed(42)
         storage = {}
         rand_numbers = [random.randint(1, 1000000) for _ in range(100)]
-        keys = list(map(lambda x: bytes(f'{x}', 'utf-8'), rand_numbers))
+        keys = list(map(lambda x: str(x).encode(), rand_numbers))
 
         trie = MerklePatriciaTrie(storage)
 
@@ -204,10 +204,8 @@ class TestMPT(unittest.TestCase):
         root_hash = trie.root_hash()
 
         self.assertEqual(
-            root_hash,
-            bytes.fromhex(
-                '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'
-            ),
+            root_hash.hex(),
+            '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84',
         )
 
     def test_root_hash_after_updates(self):
@@ -227,10 +225,8 @@ class TestMPT(unittest.TestCase):
         root_hash = trie.root_hash()
 
         self.assertEqual(
-            root_hash,
-            bytes.fromhex(
-                '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'
-            ),
+            root_hash.hex(),
+            '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84',
         )
 
     def test_root_hash_after_deletes(self):
@@ -256,10 +252,8 @@ class TestMPT(unittest.TestCase):
         root_hash = trie.root_hash()
 
         self.assertEqual(
-            root_hash,
-            bytes.fromhex(
-                '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84'
-            ),
+            root_hash.hex(),
+            '5991bb8c6514148a29db676a14ac506cd2cd5775ace63c30a4fe457715e9ac84',
         )
 
     def test_trie_from_old_root(self):
