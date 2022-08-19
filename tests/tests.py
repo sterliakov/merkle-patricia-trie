@@ -95,7 +95,7 @@ class TestMPT(unittest.TestCase):
         self.assertEqual(value, gotten_value)
 
         with self.assertRaises(KeyError):
-            trie.get(rlp.encode(b'no_key'))
+            trie[rlp.encode(b'no_key')]
 
     def test_insert_get_one_long(self):
         storage = {}
@@ -149,7 +149,7 @@ class TestMPT(unittest.TestCase):
         trie.delete(b'key')
 
         with self.assertRaises(KeyError):
-            trie.get(b'key')
+            trie[b'key']
 
     def test_delete_many(self):
         storage = {}
@@ -189,7 +189,7 @@ class TestMPT(unittest.TestCase):
         for kv in keys:
             trie.delete(kv)
 
-        self.assertEqual(trie.root_hash(), Node.EMPTY_HASH)
+        self.assertEqual(trie.root_hash().hex(), Node.EMPTY_HASH.hex())
 
     def test_root_hash(self):
         storage = {}
@@ -278,4 +278,40 @@ class TestMPT(unittest.TestCase):
         # New.
         self.assertEqual(trie.get(b'do'), b'not_a_verb')
         with self.assertRaises(KeyError):
-            trie.get(b'dog')
+            trie[b'dog']
+
+    def test_find_path(self):
+        trie = MerklePatriciaTrie({})
+        trie.update(b'a', b'value1')
+        trie.update(b'aa', b'value2')
+        trie.update(b'aaa', b'value3')
+        trie.update(b'aaba', b'value4')
+
+        # Setups a trie which consists of
+        #   ExtensionNode ->
+        #   BranchNode -> value1
+        #   ExtensionNode ->
+        #   BranchNode -> value2
+        #   LeafNode -> value3
+
+        path = list(trie.find_path(b'aaa'))
+        self.assertTrue(path, 'find_path should find a node')
+
+        trie.delete(b'aaa')  # delete the BranchNode -> value1 from the DB
+        with self.assertRaises(KeyError):
+            trie[b'aaa']
+
+    def test_extension_node(self):
+        trie = MerklePatriciaTrie({})
+        trie.update(b'doge', b'coin')
+        trie.update(b'do', b'verb')
+        self.assertEqual(
+            trie.root().hex(),
+            'f803dfcb7e8f1afd45e88eedb4699a7138d6c07b71243d9ae9bff720c99925f9',
+        )
+
+        trie.update(b'done', b'finished')
+        self.assertEqual(
+            trie.root().hex(),
+            '409cff4d820b394ed3fb1cd4497bdd19ffa68d30ae34157337a7043c94a3e8cb',
+        )

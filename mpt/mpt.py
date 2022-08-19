@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum
+from typing import Iterator
 
 from .hash import keccak_hash
 from .nibble_path import NibblePath
@@ -52,7 +55,13 @@ class MerklePatriciaTrie:
         else:
             return keccak_hash(self._root)
 
-    def get(self, encoded_key):
+    def get(self, encoded_key, default=None):
+        try:
+            return self[encoded_key]
+        except KeyError:
+            return default
+
+    def __getitem__(self, encoded_key):
         """This method gets a value associated with provided key.
 
         Note
@@ -87,6 +96,9 @@ class MerklePatriciaTrie:
 
         return result_node.data
 
+    def __setitem__(self, encoded_key, encoded_value):
+        return self.update(encoded_key, encoded_value)
+
     def update(self, encoded_key, encoded_value):
         """This method updates a provided key-value pair into the trie.
 
@@ -113,6 +125,9 @@ class MerklePatriciaTrie:
         result = self._update(self._root, path, encoded_value)
 
         self._root = result
+
+    def __delitem__(self, encoded_key):
+        return self.delete(encoded_key)
 
     def delete(self, encoded_key):
         """This method removes a value associtated with provided key.
@@ -151,6 +166,44 @@ class MerklePatriciaTrie:
         elif action == MerklePatriciaTrie._DeleteAction.USELESS_BRANCH:
             _, new_root = info
             self._root = new_root
+
+    def find_path(self, encoded_key: bytes) -> Iterator[Node.AnyNode]:
+        """Find the path from encoding key to trie root.
+
+        Args:
+            encoded_key: Key to find in a trie.
+
+        Yields:
+            Nodes of path.
+        """
+        path = NibblePath(encoded_key)
+        yield from self._find_path(self._root, path)
+
+    def _find_path(self, node_ref: bytes, path: NibblePath) -> Iterator[Node.AnyNode]:
+        node = self._get_node(node_ref)
+        yield node
+
+        if len(path) == 0:
+            return
+
+        if isinstance(node, Node.Leaf):
+            # If we found a leaf, it's either the leaf we're looking for or wrong one.
+            if node.path == path:
+                return
+        elif isinstance(node, Node.Extension):
+            # If we found an extension, we need to go deeper.
+            if path.starts_with(node.path):
+                path.consume(len(node.path))
+                yield from self._find_path(node.next_ref, path)
+                return
+        elif isinstance(node, Node.Branch):
+            # If we found a branch node, go to the appropriate branch.
+            branch = node.branches[path.next()]
+            if len(branch) > 0:
+                yield from self._find_path(branch, path)
+                return
+
+        raise KeyError
 
     def _get_node(self, node_ref):
         raw_node = None

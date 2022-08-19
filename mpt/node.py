@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 import rlp
 
 from .hash import keccak_hash
@@ -23,13 +25,21 @@ def _prepare_reference_for_encoding(ref):
 class Node:
     EMPTY_HASH = keccak_hash(rlp.encode(b''))
 
-    class Leaf:
+    class AnyNode(ABC):
+        @abstractmethod
+        def raw(self) -> bytes:
+            raise NotImplementedError
+
+    class Leaf(AnyNode):
         def __init__(self, path, data):
             self.path = path
             self.data = data
 
         def encode(self):
             return rlp.encode([self.path.encode(True), self.data])
+
+        def raw(self):
+            return [self.path.encode(True), self.data]
 
     class Extension:
         def __init__(self, path, next_ref):
@@ -40,6 +50,9 @@ class Node:
             next_ref = _prepare_reference_for_encoding(self.next_ref)
             return rlp.encode([self.path.encode(False), next_ref])
 
+        def raw(self):
+            return [self.path.encode(False), self.data]
+
     class Branch:
         def __init__(self, branches, data=None):
             self.branches = branches
@@ -48,6 +61,9 @@ class Node:
         def encode(self):
             branches = list(map(_prepare_reference_for_encoding, self.branches))
             return rlp.encode(branches + [self.data])
+
+        def raw(self):
+            return [*self.branches, self.data]
 
     @classmethod
     def decode(cls, encoded_data):

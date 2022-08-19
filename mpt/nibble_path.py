@@ -16,10 +16,21 @@ class NibblePath:
         return f'<Hex 0x{self._data.hex()} | Raw {self._data}>'
 
     def __eq__(self, other):
+        if not isinstance(other, NibblePath):
+            return NotImplemented
+
         if len(self) != len(other):
             return False
 
         return all(self.at(i) == other.at(i) for i in range(len(self)))
+
+    def __getitem__(self, idx):
+        return self.at(idx)
+
+    def next(self):  # noqa: A003
+        first = self[0]
+        self.consume(1)
+        return first
 
     @classmethod
     def decode_with_type(cls, data):
