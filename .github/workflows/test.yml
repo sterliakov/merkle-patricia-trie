@@ -50,6 +50,15 @@ jobs:
         env:
           UV_RESOLUTION: ${{ matrix.deps }}
 
+      - name: Typecheck with mypy
+        run: uv run mypy mpt
+        env:
+          UV_RESOLUTION: ${{ matrix.deps }}
+      - name: Typecheck with basedpyright
+        run: uv run basedpyright mpt
+        env:
+          UV_RESOLUTION: ${{ matrix.deps }}
+
       - name: Run tests
         run: uv run -m unittest
         env:

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from enum import Enum
-from typing import Literal, Protocol, TypeAlias, TypeVar, overload
+from typing import Literal, Protocol, TypeVar, overload
 
-from typing_extensions import assert_never
+from typing_extensions import TypeAlias, assert_never
 
 from .hash import keccak_hash
 from .nibble_path import NibblePath
@@ -46,7 +46,7 @@ _UselessBranchDeleteResult: TypeAlias = tuple[
     Literal[_DeleteAction.USELESS_BRANCH], tuple[NibblePath, bytes]
 ]
 _DeleteResult: TypeAlias = (
-    _DeletedDeleteResult | _UpdatedDeleteResult | _UselessBranchDeleteResult
+    '_DeletedDeleteResult | _UpdatedDeleteResult | _UselessBranchDeleteResult'
 )
 
 

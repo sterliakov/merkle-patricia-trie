@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Sequence, Sized
-from typing import Final, Protocol, TypeAlias
+from typing import Final, Protocol
 
-from typing_extensions import Self
+from typing_extensions import Self, TypeAlias
 
 
 class _NibblePathLike(Sized, Protocol):

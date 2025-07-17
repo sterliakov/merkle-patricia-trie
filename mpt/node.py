@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Final, TypeAlias
+from typing import TYPE_CHECKING, Final
 
 from .hash import keccak_hash
 from .nibble_path import NibblePath
 
 if TYPE_CHECKING:
+    # WOrk around untyped rlp package
+    from typing_extensions import TypeAlias
+
     _Encodable: TypeAlias = 'bytes | bytearray | Sequence[_Encodable]'
 
     class _Rlp:
@@ -18,7 +21,7 @@ if TYPE_CHECKING:
 else:
     import rlp
 
-NODE_REF_LENGTH = 32
+NODE_REF_LENGTH: Final = 32
 
 
 def _prepare_reference_for_usage(ref: _Encodable) -> bytes:
