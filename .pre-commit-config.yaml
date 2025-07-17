@@ -18,11 +18,16 @@ repos:
         args: [--autofix, --indent, '4']
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.6
+    rev: v0.12.3
     hooks:
       - id: ruff-format
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.7.21
+    hooks:
+      - id: uv-lock
 
   - repo: https://github.com/shellcheck-py/shellcheck-py   # Shellcheck
     rev: v0.10.0.1
@@ -31,7 +36,7 @@ repos:
         args: [-x, -P, SCRIPTDIR]
 
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-    rev: v2.14.0
+    rev: v2.15.0
     hooks:
       - id: pretty-format-yaml
         args: [--autofix, --indent, '2', --offset, '2']
@@ -39,7 +44,7 @@ repos:
         args: [--autofix, --indent, '4', --trailing-comma]
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.33.0
+    rev: 0.33.2
     hooks:
       - id: check-github-workflows
       - id: check-jsonschema
@@ -54,6 +59,6 @@ repos:
           - github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.10.0
 
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.6.0
+    rev: v1.11.0
     hooks:
       - id: zizmor
