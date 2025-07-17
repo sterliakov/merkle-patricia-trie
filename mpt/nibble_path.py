@@ -1,21 +1,59 @@
-class NibblePath:
-    ODD_FLAG = 0x10
-    LEAF_FLAG = 0x20
+from __future__ import annotations
 
-    def __init__(self, data, offset=0):
+from collections.abc import Sequence, Sized
+from typing import Final, Protocol
+
+from typing_extensions import Self, TypeAlias
+
+
+class _NibblePathLike(Sized, Protocol):
+    def at(self, idx: int, /) -> int: ...
+
+
+class _ChainedPath:
+    """Class that chains two paths."""
+
+    first: _NibblePathLike
+    second: _NibblePathLike
+
+    def __init__(self, first: _NibblePathLike, second: _NibblePathLike) -> None:
+        self.first = first
+        self.second = second
+
+    def __len__(self) -> int:
+        return len(self.first) + len(self.second)
+
+    def at(self, idx: int) -> int:
+        if idx < len(self.first):
+            return self.first.at(idx)
+        return self.second.at(idx - len(self.first))
+
+
+class NibblePath:
+    ODD_FLAG: Final = 0x10
+    LEAF_FLAG: Final = 0x20
+
+    _Chained: TypeAlias = _ChainedPath  # For backwards compat
+
+    _data: Sequence[int]
+    _offset: int
+
+    def __init__(self, data: Sequence[int], offset: int = 0) -> None:
         self._data = data
         self._offset = offset
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._data) * 2 - self._offset
 
-    def __repr__(self):
-        return f'<NibblePath: Data: 0x{self._data.hex()}, Offset: {self._offset}>'
+    def __repr__(self) -> str:
+        return (
+            f'<NibblePath: Data: 0x{bytes(self._data).hex()}, Offset: {self._offset}>'
+        )
 
-    def __str__(self):
-        return f'<Hex 0x{self._data.hex()} | Raw {self._data}>'
+    def __str__(self) -> str:
+        return f'<Hex 0x{bytes(self._data).hex()} | Raw {self._data}>'
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, NibblePath):
             return NotImplemented
 
@@ -24,19 +62,19 @@ class NibblePath:
 
         return all(self.at(i) == other.at(i) for i in range(len(self)))
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> int:
         return self.at(idx)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self._data, self._offset))
 
-    def next(self):
+    def next(self) -> int:
         first = self[0]
         self.consume(1)
         return first
 
     @classmethod
-    def decode_with_type(cls, data):
+    def decode_with_type(cls, data: Sequence[int]) -> tuple[Self, bool]:
         """Decodes NibblePath and its type from raw bytes."""
         is_odd_len = data[0] & cls.ODD_FLAG == cls.ODD_FLAG
         is_leaf = data[0] & cls.LEAF_FLAG == cls.LEAF_FLAG
@@ -46,18 +84,18 @@ class NibblePath:
         return cls(data, offset), is_leaf
 
     @classmethod
-    def decode(cls, data):
+    def decode(cls, data: Sequence[int]) -> Self:
         """Decodes NibblePath without its type from raw bytes."""
         return cls.decode_with_type(data)[0]
 
-    def starts_with(self, other):
+    def starts_with(self, other: _NibblePathLike) -> bool:
         """Checks if `other` is prefix of `self`."""
         if len(other) > len(self):
             return False
 
         return all(self.at(i) == other.at(i) for i in range(len(other)))
 
-    def at(self, idx):
+    def at(self, idx: int) -> int:
         """Returns nibble at the certain position."""
         idx += self._offset
 
@@ -67,15 +105,16 @@ class NibblePath:
         byte = self._data[byte_idx]
         return byte >> 4 if nibble_idx == 0 else byte & 0x0F
 
-    def consume(self, amount):
+    def consume(self, amount: int) -> Self:
         """Cuts off nibbles at the beginning of the path."""
         self._offset += amount
         return self
 
     @classmethod
-    def _create_new(cls, path, length):
+    def _create_new(cls, path: _NibblePathLike, length: int) -> Self:
         """Creates a new NibblePath from a given object with a certain length."""
         is_odd_len = length % 2 == 1
+        data: list[int]
         pos, data = 0, []
 
         if is_odd_len:
@@ -90,7 +129,7 @@ class NibblePath:
 
         return cls(data, offset)
 
-    def common_prefix(self, other):
+    def common_prefix(self, other: _NibblePathLike) -> NibblePath:
         """Returns common part at the beginning of both paths."""
         least_len = min(len(self), len(other))
         common_len = next(
@@ -99,7 +138,7 @@ class NibblePath:
 
         return NibblePath._create_new(self, common_len)
 
-    def encode(self, is_leaf):
+    def encode(self, is_leaf: bool) -> bytes:
         """Encode NibblePath into bytes.
 
         Encoded path contains prefix with flags of type and length and also may contain
@@ -123,22 +162,7 @@ class NibblePath:
 
         return bytes(output)
 
-    class _Chained:
-        """Class that chains two paths."""
-
-        def __init__(self, first, second):
-            self.first = first
-            self.second = second
-
-        def __len__(self):
-            return len(self.first) + len(self.second)
-
-        def at(self, idx):
-            if idx < len(self.first):
-                return self.first.at(idx)
-            return self.second.at(idx - len(self.first))
-
-    def combine(self, other):
+    def combine(self, other: _NibblePathLike) -> NibblePath:
         """Merges two paths into one."""
-        chained = NibblePath._Chained(self, other)
+        chained = _ChainedPath(self, other)
         return NibblePath._create_new(chained, len(chained))
