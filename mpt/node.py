@@ -8,7 +8,7 @@ from .nibble_path import NibblePath
 NODE_REF_LENGTH = 32
 
 
-def _prepare_reference_for_usage(ref):
+def _prepare_reference_for_usage(ref) -> bytes:
     """Encodes reference into RLP so stored references will appear as bytes."""
     if not isinstance(ref, bytes):
         return rlp.encode(ref)
@@ -16,7 +16,7 @@ def _prepare_reference_for_usage(ref):
     return ref
 
 
-def _prepare_reference_for_encoding(ref):
+def _prepare_reference_for_encoding(ref: bytes):
     """Decodes RLP-encoded reference so the full node will be encoded correctly."""
     if 0 < len(ref) < NODE_REF_LENGTH:
         return rlp.decode(ref)
@@ -33,7 +33,7 @@ class Node:
             raise NotImplementedError
 
     class Leaf(AnyNode):
-        def __init__(self, path, data):
+        def __init__(self, path, data) -> None:
             self.path = path
             self.data = data
 
@@ -44,7 +44,7 @@ class Node:
             return [self.path.encode(True), self.data]
 
     class Extension:
-        def __init__(self, path, next_ref):
+        def __init__(self, path, next_ref) -> None:
             self.path = path
             self.next_ref = next_ref
 
@@ -56,7 +56,7 @@ class Node:
             return [self.path.encode(False), self.data]
 
     class Branch:
-        def __init__(self, branches, data=None):
+        def __init__(self, branches, data=None) -> None:
             self.branches = branches
             self.data = data
 

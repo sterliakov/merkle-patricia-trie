@@ -9,7 +9,7 @@ from .node import NODE_REF_LENGTH, Node
 
 
 class MerklePatriciaTrie:
-    def __init__(self, storage, root=None, secure=False):
+    def __init__(self, storage, root=None, secure: bool = False) -> None:
         """Creates a new instance of MPT.
 
         MerklePatriciaTrie works like a wrapper over provided storage.
@@ -95,10 +95,10 @@ class MerklePatriciaTrie:
 
         return result_node.data
 
-    def __setitem__(self, encoded_key, encoded_value):
+    def __setitem__(self, encoded_key, encoded_value) -> None:
         return self.update(encoded_key, encoded_value)
 
-    def update(self, encoded_key, encoded_value):
+    def update(self, encoded_key, encoded_value) -> None:
         """This method updates a provided key-value pair into the trie.
 
         If there is no such a key in the trie, a new entry will be created.
@@ -125,10 +125,10 @@ class MerklePatriciaTrie:
 
         self._root = result
 
-    def __delitem__(self, encoded_key):
+    def __delitem__(self, encoded_key) -> None:
         return self.delete(encoded_key)
 
-    def delete(self, encoded_key):
+    def delete(self, encoded_key) -> None:
         """This method removes a value associtated with provided key.
 
         Note
@@ -144,7 +144,7 @@ class MerklePatriciaTrie:
         Raises
         ------
         KeyError
-            KeyError is raised if there is no value assotiated with provided key.
+            KeyError is raised if there is no value associated with provided key.
         """
         if self._root is None:
             return
@@ -361,7 +361,7 @@ class MerklePatriciaTrie:
 
         return self._store_node(Node.Branch(branches, branch_value))
 
-    def _create_branch_leaf(self, path, value, branches):
+    def _create_branch_leaf(self, path, value, branches) -> None:
         """If path isn't empty, creates leaf node and stores reference in appropriate branch."""
         if len(path) > 0:
             idx = path.at(0)
@@ -369,7 +369,7 @@ class MerklePatriciaTrie:
             leaf_ref = self._store_node(Node.Leaf(path.consume(1), value))
             branches[idx] = leaf_ref
 
-    def _create_branch_extension(self, path, next_ref, branches):
+    def _create_branch_extension(self, path, next_ref, branches) -> None:
         """Create or retrieve extension node.
 
         If needed, creates an extension node and stores reference in appropriate branch.
