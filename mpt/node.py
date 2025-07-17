@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, TypeAlias
+from typing import TYPE_CHECKING, Final, TypeAlias
 
 from .hash import keccak_hash
 from .nibble_path import NibblePath
@@ -48,6 +48,9 @@ class AnyNode(ABC):
 
 
 class Leaf(AnyNode):
+    path: NibblePath
+    data: bytes
+
     def __init__(self, path: NibblePath, data: bytes) -> None:
         self.path = path
         self.data = data
@@ -60,6 +63,9 @@ class Leaf(AnyNode):
 
 
 class Extension(AnyNode):
+    path: NibblePath
+    next_ref: bytes
+
     def __init__(self, path: NibblePath, next_ref: bytes) -> None:
         self.path = path
         self.next_ref = next_ref
@@ -73,6 +79,9 @@ class Extension(AnyNode):
 
 
 class Branch(AnyNode):
+    branches: list[bytes]
+    data: bytes
+
     def __init__(self, branches: list[bytes], data: bytes) -> None:
         self.branches = branches
         self.data = data
@@ -86,7 +95,7 @@ class Branch(AnyNode):
 
 
 class Node:
-    EMPTY_HASH = keccak_hash(rlp.encode(b''))
+    EMPTY_HASH: Final = keccak_hash(rlp.encode(b''))
 
     AnyNode: TypeAlias = AnyNode
     Leaf: TypeAlias = Leaf
@@ -104,12 +113,16 @@ class Node:
         if len(data) == 17:  # noqa: PLR2004
             branches = list(map(_prepare_reference_for_usage, data[:16]))
             node_data = data[16]
+            assert isinstance(node_data, bytes)
             return Node.Branch(branches, node_data)
 
-        path, is_leaf = NibblePath.decode_with_type(data[0])
+        type_, ref_or_data = data
+        assert isinstance(type_, bytes)
+        assert isinstance(ref_or_data, bytes)
+        path, is_leaf = NibblePath.decode_with_type(type_)
         if is_leaf:
-            return Node.Leaf(path, data[1])
-        ref = _prepare_reference_for_usage(data[1])
+            return Node.Leaf(path, ref_or_data)
+        ref = _prepare_reference_for_usage(ref_or_data)
         return Node.Extension(path, ref)
 
     @classmethod

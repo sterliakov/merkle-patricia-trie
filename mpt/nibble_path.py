@@ -1,17 +1,20 @@
 from __future__ import annotations
 
 from collections.abc import Sequence, Sized
-from typing import Protocol
+from typing import Final, Protocol, TypeAlias
 
 from typing_extensions import Self
 
 
-class _NibblePathLike(Protocol, Sized):
+class _NibblePathLike(Sized, Protocol):
     def at(self, idx: int, /) -> int: ...
 
 
 class _ChainedPath:
     """Class that chains two paths."""
+
+    first: _NibblePathLike
+    second: _NibblePathLike
 
     def __init__(self, first: _NibblePathLike, second: _NibblePathLike) -> None:
         self.first = first
@@ -27,10 +30,13 @@ class _ChainedPath:
 
 
 class NibblePath:
-    ODD_FLAG = 0x10
-    LEAF_FLAG = 0x20
+    ODD_FLAG: Final = 0x10
+    LEAF_FLAG: Final = 0x20
 
-    _Chained = _ChainedPath  # For backwards compat
+    _Chained: TypeAlias = _ChainedPath  # For backwards compat
+
+    _data: Sequence[int]
+    _offset: int
 
     def __init__(self, data: Sequence[int], offset: int = 0) -> None:
         self._data = data
@@ -108,6 +114,7 @@ class NibblePath:
     def _create_new(cls, path: _NibblePathLike, length: int) -> Self:
         """Creates a new NibblePath from a given object with a certain length."""
         is_odd_len = length % 2 == 1
+        data: list[int]
         pos, data = 0, []
 
         if is_odd_len:

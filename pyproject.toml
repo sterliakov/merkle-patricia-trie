@@ -8,6 +8,7 @@ requires = [
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.31.0",
     "mypy>=1.17.0",
 ]
 
@@ -36,6 +37,14 @@ version = "0.4.0"
 Home = "https://github.com/sterliakov/merkle-patricia-trie"
 Issues = "https://github.com/sterliakov/merkle-patricia-trie/issues"
 Source = "https://github.com/sterliakov/merkle-patricia-trie"
+
+[tool.basedpyright]
+failOnWarnings = true
+reportImplicitOverride = "none"
+reportUnusedCallResult = "none"
+reportUnusedImport = "none"
+reportUnusedParameter = "none"
+typeCheckingMode = "recommended"
 
 [tool.mypy]
 enable_error_code = ["deprecated", "redundant-expr", "possibly-undefined", "truthy-bool", "truthy-iterable"]

@@ -53,6 +53,10 @@ _DeleteResult: TypeAlias = (
 class MerklePatriciaTrie:
     _DeleteAction: TypeAlias = _DeleteAction
 
+    _storage: _CompatibleStorage
+    _root: bytes | None
+    _secure: bool
+
     def __init__(
         self,
         storage: _CompatibleStorage,
@@ -135,7 +139,7 @@ class MerklePatriciaTrie:
 
         result_node = self._get(self._root, path)
 
-        if isinstance(result_node, Node.Extension):
+        if not isinstance(result_node, (Node.Leaf, Node.Branch)):
             # False positive
             raise RuntimeError('The given key corresponds to an Extension node')  # noqa: TRY004
 
