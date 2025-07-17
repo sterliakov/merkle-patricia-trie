@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from Crypto.Hash import keccak  # noqa: S413
 
 

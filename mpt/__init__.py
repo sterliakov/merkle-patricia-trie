@@ -5,6 +5,8 @@
 :license: MIT, see LICENSE for more details.
 """
 
+from __future__ import annotations
+
 from .mpt import MerklePatriciaTrie
 
 __all__ = ['MerklePatriciaTrie']

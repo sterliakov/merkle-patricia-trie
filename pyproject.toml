@@ -6,6 +6,11 @@ requires = [
     'toml>=0.10.1;python_version<"3.11"',
 ]
 
+[dependency-groups]
+dev = [
+    "mypy>=1.17.0",
+]
+
 [project]
 authors = [{name = "sterliakov", email = "terlya.stas@gmail.com"}]
 classifiers = [
@@ -32,6 +37,14 @@ Home = "https://github.com/sterliakov/merkle-patricia-trie"
 Issues = "https://github.com/sterliakov/merkle-patricia-trie/issues"
 Source = "https://github.com/sterliakov/merkle-patricia-trie"
 
+[tool.mypy]
+enable_error_code = ["deprecated", "redundant-expr", "possibly-undefined", "truthy-bool", "truthy-iterable"]
+extra_checks = true
+strict = true
+strict_bytes = true
+strict_equality = true
+warn_unused_ignores = true
+
 [tool.ruff]
 preview = true
 target-version = 'py39'
@@ -41,6 +54,7 @@ detect-string-imports = true
 
 [tool.ruff.format]
 docstring-code-format = true
+preview = true
 quote-style = "single"
 
 [tool.ruff.lint]
@@ -57,7 +71,7 @@ extend-ignore = [
     "CPY",  # copyright
     "PT",  # pytest
     "TC00",  # Move ... import `...` into a type-checking block
-    "PLW1514",  # `open` in text mode without explicit `encoding` argument
+    "RET505",
     # conflicts with ruff-fmt
     "E501",  # Let ruff care about line width, if not splitable - go on
     "COM812",
@@ -67,11 +81,14 @@ extend-ignore = [
     "FBT",
 ]
 extend-safe-fixes = ["F401"]
+preview = true
 select = ['ALL']
+unfixable = ['ERA001']
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
 force-wrap-aliases = true
+required-imports = ["from __future__ import annotations"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]

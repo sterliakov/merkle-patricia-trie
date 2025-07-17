@@ -40,12 +40,14 @@ class NibblePath:
         return len(self._data) * 2 - self._offset
 
     def __repr__(self) -> str:
-        return f'<NibblePath: Data: 0x{bytes(self._data).hex()}, Offset: {self._offset}>'
+        return (
+            f'<NibblePath: Data: 0x{bytes(self._data).hex()}, Offset: {self._offset}>'
+        )
 
     def __str__(self) -> str:
         return f'<Hex 0x{bytes(self._data).hex()} | Raw {self._data}>'
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, NibblePath):
             return NotImplemented
 
@@ -155,5 +157,5 @@ class NibblePath:
 
     def combine(self, other: _NibblePathLike) -> NibblePath:
         """Merges two paths into one."""
-        chained = NibblePath._Chained(self, other)
+        chained = _ChainedPath(self, other)
         return NibblePath._create_new(chained, len(chained))
