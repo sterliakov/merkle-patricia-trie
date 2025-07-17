@@ -121,9 +121,9 @@ class Node:
 
         type_, ref_or_data = data
         assert isinstance(type_, bytes)
-        assert isinstance(ref_or_data, bytes)
         path, is_leaf = NibblePath.decode_with_type(type_)
         if is_leaf:
+            assert isinstance(ref_or_data, bytes)
             return Node.Leaf(path, ref_or_data)
         ref = _prepare_reference_for_usage(ref_or_data)
         return Node.Extension(path, ref)

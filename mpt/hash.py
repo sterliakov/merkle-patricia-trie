@@ -4,4 +4,4 @@ from Crypto.Hash import keccak  # noqa: S413
 
 
 def keccak_hash(data: bytes) -> bytes:
-    return keccak.new(data, digest_bits=256).digest()
+    return keccak.new(data=data, digest_bits=256).digest()
