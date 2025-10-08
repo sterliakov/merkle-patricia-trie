@@ -31,7 +31,7 @@ license = {file = "LICENSE"}
 name = "merkle-patricia-trie"
 readme = "README.md"
 requires-python = ">=3.9"
-version = "0.4.0"
+version = "0.4.1"
 
 [project.urls]
 Home = "https://github.com/sterliakov/merkle-patricia-trie"
