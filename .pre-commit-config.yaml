@@ -18,14 +18,14 @@ repos:
         args: [--autofix, --indent, '4']
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
+    rev: v0.15.20
     hooks:
       - id: ruff-format
       - id: ruff-check
         args: [--fix]
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.20
+    rev: 0.11.26
     hooks:
       - id: uv-lock
 
@@ -36,7 +36,7 @@ repos:
         args: [-x, -P, SCRIPTDIR]
 
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-    rev: v2.15.0
+    rev: v2.16.0
     hooks:
       - id: pretty-format-yaml
         args: [--autofix, --indent, '2', --offset, '2']
@@ -45,7 +45,7 @@ repos:
         exclude: ^uv.lock$
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.0
+    rev: 0.37.4
     hooks:
       - id: check-github-workflows
       - id: check-jsonschema
@@ -53,13 +53,13 @@ repos:
         files: ^renovate.json$
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.9
+    rev: v1.7.12
     hooks:
       - id: actionlint
         additional_dependencies:
           - github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.11.1
 
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.19.0
+    rev: v1.26.1
     hooks:
       - id: zizmor
