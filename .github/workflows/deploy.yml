@@ -29,7 +29,7 @@ jobs:
 
       - name: Create GitHub release
         # can be replaced with gh cli calls, but I'm not ready to fix that right now
-        uses: softprops/action-gh-release@v2  # zizmor: ignore[superfluous-actions]
+        uses: softprops/action-gh-release@v3  # zizmor: ignore[superfluous-actions]
         with:
           prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
           make_latest: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') }}
