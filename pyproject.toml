@@ -23,7 +23,7 @@ classifiers = [
 ]
 dependencies = [
     "pycryptodome >=3.22.0, <4",
-    'rlp >=2.0, <5.0',
+    'rlp >=5, <5.1',
 ]
 description = "A simlpe Merkle Patricia Trie implementation"
 keywords = ["trie", "data-structures", "datastructures", "merkle-patricia-trie", "blockchain", "ethereum"]
